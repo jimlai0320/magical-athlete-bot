@@ -1,0 +1,40 @@
+# 角色圖片檔名對照
+
+| 檔名 | 角色 |
+|---|---|
+| alchemist.png | 鍊金術士 |
+| blimp.png | 飛艇 |
+| coach.png | 教練 |
+| baba_yaga.png | 芭芭雅嘎 |
+| centaur.png | 半人馬 |
+| copy_cat.png | 複製貓 |
+| banana.png | 香蕉 |
+| cheerleader.png | 啦啦隊長 |
+| dicemonger.png | 骰子商人 |
+| duelist.png | 決鬥者 |
+| genius.png | 天才 |
+| heckler.png | 嘲諷者 |
+| egg.png | 蛋 |
+| gunk.png | 黏液怪 |
+| huge_baby.png | 巨大嬰兒 |
+| flip_flop.png | 翻翻鞋 |
+| hare.png | 野兔 |
+| hypnotist.png | 催眠師 |
+| inchworm.png | 尺蠖 |
+| legs.png | 大長腿 |
+| mastermind.png | 智多星 |
+| lackey.png | 跟班 |
+| loveable_loser.png | 可愛輸家 |
+| mouth.png | 大嘴 |
+| leaptoad.png | 跳跳蟾蜍 |
+| magician.png | 魔術師 |
+| party_animal.png | 派對動物 |
+| rocket_scientist.png | 火箭科學家 |
+| sisyphus.png | 薛西弗斯 |
+| suckerfish.png | 吸盤魚 |
+| romantic.png | 浪漫派 |
+| skipper.png | 船長 |
+| third_wheel.png | 電燈泡 |
+| scoocher.png | 挪挪怪 |
+| stickler.png | 吹毛求疵鬼 |
+| twin.png | 雙胞胎 |

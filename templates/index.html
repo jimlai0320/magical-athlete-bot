@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>魔法運動員選角</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root{--bg:#f4f7fb;--ink:#121212;--accent:#ffcc24}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink)}
+    header{position:sticky;top:0;z-index:2;padding:16px 14px 12px;background:linear-gradient(180deg,#fff 80%,rgba(255,255,255,.86));text-align:center}
+    h1{margin:0;font-size:25px;font-weight:900}.sub{font-size:14px;color:#555;margin-top:4px}
+    #notice{margin:0 12px 12px;padding:10px 12px;background:#fff3bf;border:2px solid #222;border-radius:14px;font-weight:700;text-align:center}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0 10px 22px}
+    .card{appearance:none;border:3px solid #151515;border-radius:18px;background:#fff;padding:0;overflow:hidden;box-shadow:0 4px 0 rgba(0,0,0,.18);cursor:pointer;transition:.12s transform}
+    .card:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+    .card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#eee}
+    .name{padding:8px 6px 4px;font-size:17px;font-weight:900}.power{padding:0 8px 10px;color:#555;font-size:12px;line-height:1.35;min-height:42px}
+    .empty{padding:30px;text-align:center;color:#666}
+    footer{position:sticky;bottom:0;background:#fff;padding:10px;border-top:1px solid #ddd;display:flex;gap:8px}
+    footer button{flex:1;border:0;border-radius:13px;padding:12px;font-weight:800;background:#e8edf5}
+  </style>
+</head>
+<body>
+<header><h1 id="title">請選擇角色</h1><div class="sub" id="subtitle">點選圖片即可選擇</div></header>
+<div id="notice">載入中…</div>
+<div class="grid" id="grid"></div>
+<footer><button onclick="location.reload()">🔄 重新整理</button><button onclick="Telegram.WebApp.close()">✖️ 取消</button></footer>
+<script>
+const tg=window.Telegram?.WebApp; if(tg){tg.ready();tg.expand();}
+const p=new URLSearchParams(location.search);
+const chat_id=p.get('chat_id'), user_id=p.get('user_id'), mode=p.get('mode'), token=p.get('token');
+const title=document.getElementById('title'), subtitle=document.getElementById('subtitle'), notice=document.getElementById('notice'), grid=document.getElementById('grid');
+if(mode==='draft'){title.textContent='🎴 選秀：請挑一名角色';subtitle.textContent='只有目前輪到的玩家可以選';}
+if(mode==='race'){title.textContent='🏁 本場秘密選角';subtitle.textContent='選擇後只會回傳給 Bot，群組等全員選完才公開';}
+async function load(){
+  try{
+    const r=await fetch(`/api/options?chat_id=${encodeURIComponent(chat_id)}&user_id=${encodeURIComponent(user_id)}&mode=${encodeURIComponent(mode)}&token=${encodeURIComponent(token)}`);
+    const data=await r.json();
+    if(!r.ok) throw new Error(data.detail||'讀取失敗');
+    notice.textContent=data.notice||'點選角色圖片';
+    grid.innerHTML='';
+    for(const x of data.options){
+      const b=document.createElement('button'); b.className='card';
+      b.innerHTML=`<img src="${x.image}" alt="${x.name}"><div class="name">${x.name}</div><div class="power">${x.power}</div>`;
+      b.onclick=()=>pick(x.key,x.name); grid.appendChild(b);
+    }
+    if(!data.options.length) grid.innerHTML='<div class="empty">目前沒有可選角色</div>';
+  }catch(e){notice.textContent='⚠️ '+e.message;}
+}
+function pick(key,name){
+  if(!confirm(`確定選擇「${name}」嗎？`)) return;
+  const payload={action:mode==='draft'?'draft_pick':'race_pick',chat_id:Number(chat_id),racer_key:key,token};
+  if(tg){tg.sendData(JSON.stringify(payload));setTimeout(()=>tg.close(),250)}
+  else alert(JSON.stringify(payload));
+}
+load();
+</script>
+</body>
+</html>
